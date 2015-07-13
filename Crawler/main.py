@@ -2,25 +2,58 @@ __author__ = 'besil'
 
 import urllib.request
 import time
+from threading import Thread
 
-if __name__ == '__main__':
-    url = "http://curia.europa.eu/juris/document/document_print.jsf?doclang=IT&pageIndex=0&part=1&mode=req&docid={}"
+from bottle import run, get
 
-    docid = 49331
-    limit = docid + 1000
+url = "http://curia.europa.eu/juris/document/document_print.jsf?doclang=IT&pageIndex=0&part=1&mode=req&docid={}"
+stopped_job = True
+current_id = 49331
 
-    while (docid < limit):
+
+def crawl():
+    # startid = current_id
+    global stopped_job
+    docid = current_id
+    while not stopped_job:
         f = urllib.request.urlopen(url.format(docid))
-
-        outname = "document_{}.html".format(docid)
-
+        outname = "data/document_{}.html".format(docid)
         data = f.read().decode("utf-8")
-        print("{} -> {}".format(outname, len(data)))
+
+        print("{} -> {}: {}".format(outname, len(data), len(data) > 4610))
         if (len(data) > 4610):
+            print("Saving")
             with open(outname, "w") as out:
                 out.write(data)
+                out.flush()
 
         time.sleep(1)
+        print("Sleeped")
         docid += 1
 
-        print("Document: {}".format(docid))
+    print("Stopped crawl")
+
+
+@get("/start")
+def start_job():
+    global stopped_job
+    print("Starting job")
+    stopped_job = False
+    t = Thread(target=crawl)
+    t.start()
+    print("Job started")
+    return "Job started\r\n"
+
+
+@get("/stop")
+def stop_job():
+    global stopped_job
+    stopped_job = True
+    print("Stopping job")
+    return "Stopping job\r\n"
+
+if __name__ == '__main__':
+    # Per attivare il job: curl curl http://localhost:8150/start
+    # Per stoppare il job: curl http://localhost:8150/stop
+
+    run(host="localhost", port=8150, debug=True)
