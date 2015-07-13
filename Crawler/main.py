@@ -28,7 +28,6 @@ def crawl():
                 out.flush()
 
         time.sleep(1)
-        print("Sleeped")
         docid += 1
 
     print("Stopped crawl")
