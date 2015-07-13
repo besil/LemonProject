@@ -12,9 +12,9 @@ current_id = 49331
 
 
 def crawl():
-    # startid = current_id
     global stopped_job
     docid = current_id
+
     while not stopped_job:
         f = urllib.request.urlopen(url.format(docid))
         outname = "data/document_{}.html".format(docid)
