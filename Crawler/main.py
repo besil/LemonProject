@@ -29,7 +29,6 @@ def crawl(min_size=5000, start_id=0):
 
     print("Stopped crawl")
 
-
 def pre_check():
     import sys
 
@@ -50,11 +49,11 @@ if __name__ == '__main__':
     pre_check()
 
     from bottle import run, get
+    from threading import Thread
 
     @get("/start")
     def start_job():
         global stopped_job
-        from threading import Thread
 
         print("Starting job")
         stopped_job = False
