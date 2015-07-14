@@ -12,23 +12,23 @@ stopped_job = True
 
 def crawl(min_size=5000, start_id=0):
     global stopped_job
-    docid = start_id
+    doc_id = start_id
     crawled_docs = 0
 
     while not stopped_job:
 
-        f = urllib.request.urlopen(url.format(docid))
-        outname = "data/document_{}.html".format(docid)
+        f = urllib.request.urlopen(url.format(doc_id))
+        outname = "data/document_{}.html".format(doc_id)
         data = f.read().decode("utf-8")
 
         # print("{} -> {}: {}".format(outname, len(data), len(data) > 4610))
-        if (len(data) > min_size):
+        if len(data) > min_size:
             with open(outname, "w") as out:
                 out.write(data)
                 out.flush()
 
         time.sleep(1)
-        docid += 1
+        doc_id += 1
         crawled_docs += 1
         if crawled_docs % 10 == 0: print("Crawled {} documents".format(crawled_docs))
 
