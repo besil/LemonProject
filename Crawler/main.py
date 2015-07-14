@@ -37,6 +37,7 @@ def pre_check():
         raise Exception("You must use python3")
     try:
         import bottle
+        import elasticsearch
     except ImportError:
         from subprocess import call
 
