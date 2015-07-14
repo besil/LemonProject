@@ -7,6 +7,7 @@ stopped_job = True
 def crawl(min_size=5000, start_id=0):
     global stopped_job
     import time, urllib.request
+
     doc_id = start_id
     crawled_docs = 0
 
@@ -31,17 +32,19 @@ def crawl(min_size=5000, start_id=0):
 
 def pre_check():
     import sys
-
     major_version = sys.version_info[0]
     if major_version != 3:
         raise Exception("You must use python3")
-    try:
-        import bottle
-        import elasticsearch
-    except ImportError:
-        from subprocess import call
 
-        call(["pip3", "install", "bottle"])
+    modules = ["bottle", "elasticsearch"]
+    from subprocess import call
+
+    for module in modules:
+        try:
+            __import__(module)
+        except ImportError:
+            print("Installing module {}".format(module))
+            call(["pip3", "install", module])
 
 if __name__ == '__main__':
     # Per attivare il job: curl http://localhost:8150/start
@@ -56,7 +59,6 @@ if __name__ == '__main__':
     def start_job():
         global stopped_job
 
-        print("Starting job")
         stopped_job = False
         t = Thread(target=crawl, kwargs={"min_size": 4610, "start_id": 49331})
         t.start()
