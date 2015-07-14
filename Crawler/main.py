@@ -30,7 +30,7 @@ def crawl(min_size=5000, start_id=0):
     print("Stopped crawl")
 
 
-def precheck():
+def pre_check():
     import sys
 
     major_version = sys.version_info[0]
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     # Per attivare il job: curl http://localhost:8150/start
     # Per stoppare il job: curl http://localhost:8150/stop
 
-    precheck()
+    pre_check()
 
     from bottle import run, get
 
