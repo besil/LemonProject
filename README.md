@@ -11,8 +11,6 @@ $$ |_____ $$$$$$$$/ $$ | $$ | $$ |$$ \__$$ |$$ |  $$ |
 $$       |$$       |$$ | $$ | $$ |$$    $$/ $$ |  $$ |
 $$$$$$$$/  $$$$$$$/ $$/  $$/  $$/  $$$$$$/  $$/   $$/ 
 ```
-                              
-The Lemon Project
 
 # Elasticsearch Installation
 Useful plugin: https://github.com/mobz/elasticsearch-head
