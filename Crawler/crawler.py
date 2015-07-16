@@ -1,8 +1,9 @@
 __author__ = 'besil'
 
 import utils
-
 utils.check()
+
+import json
 from elasticsearch import Elasticsearch
 import time, urllib.request
 
@@ -19,7 +20,7 @@ class Crawler(object):
 
     def start(self, crawls=1, min_size=5000):
         for _ in range(crawls):
-            url_data = eval(self.get_new_url())
+            url_data = json.loads(self.get_new_url())
             url = url_data['url']
             doc_id = url_data['doc_id']
             print("Crawling {}".format(url))
