@@ -36,10 +36,9 @@ class Crawler(object):
 
                 #         doc = {"id": doc_id, "data": data}
                 #         es.index(index="crawling", doc_type="text", id=doc_id, body=doc)
-                time.sleep(1)
-
                 crawled_docs += 1
                 if crawled_docs % 10 == 0: print("Crawled {} documents".format(crawled_docs))
+            time.sleep(1)
 
     def persist(self, data):
         pass
