@@ -35,7 +35,7 @@ class Crawler(HTMLParser, object):
 
             self.feed(data)
 
-            # print("Final text_data: {}".format(self.text_data))
+            print("Final text_data: {}".format(self.text_data))
 
             if len(data) > min_size:
                 self.persist(doc_id, raw_data=data, text_data=self.text_data)
@@ -55,7 +55,7 @@ class Crawler(HTMLParser, object):
     def handle_data(self, data):
         # print("Data is: {}".format(data))
         if not self.skip:
-            self.text_data += data.strip() + " "
+            self.text_data += data.strip() + "\n"
 
 
     def persist(self, data):
@@ -68,7 +68,7 @@ class FileCrawler(Crawler):
                 out.write(raw_data)
                 out.flush()
         if raw_data != "":
-            with open("data/text/document_{}.txt".format(doc_id)) as out:
+            with open("data/text/document_{}.txt".format(doc_id), "w") as out:
                 out.write(text_data)
                 out.flush()
 
