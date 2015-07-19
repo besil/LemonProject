@@ -25,15 +25,16 @@ class Crawler(HTMLParser, object):
         f = urllib.request.urlopen(url_server)
         return f.read().decode("utf-8")
 
-    def start(self, crawls=1, min_size=4610):
-        for _ in range(crawls):
+    def start(self, proceed=lambda crawled_docs: crawled_docs < 1, min_size=4610):
+        crawled_docs = 0
+        while proceed(crawled_docs):
+            # for _ in range(crawls):
             url_data = json.loads(self.get_new_url())
             url = url_data['url']
             doc_id = url_data['doc_id']
 
             self.log.debug("Crawling {}".format(url))
 
-            crawled_docs = 0
             f = urllib.request.urlopen(url)
             data = str(f.read().decode("utf-8"))
 
@@ -118,7 +119,8 @@ class ElasticCrawler(Crawler):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbosity on")
-    parser.add_argument("--crawls", "-c", type=int, help="The number of document to crawl", default=1)
+    parser.add_argument("--crawls", "-c", type=int,
+                        help="The number of document to crawl (-1 for infinite)", default=1)
     parser.add_argument("--save", help="Type of saving",
                         choices=["file", "elasticsearch"], default="file")
 
@@ -127,4 +129,5 @@ if __name__ == '__main__':
     crawler_type = FileCrawler if args.save == 'file' else ElasticCrawler
     crawler = crawler_type(verbose=args.verbose)
 
-    crawler.start(crawls=args.crawls)
+    proceed = lambda cc: cc < args.crawls if args.crawls > 0 else lambda cc: True
+    crawler.start(proceed=proceed)
