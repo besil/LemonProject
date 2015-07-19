@@ -4,11 +4,12 @@ import utils
 
 utils.check()
 from bottle import Bottle, static_file
-
+from elasticsearch import Elasticsearch
 
 class Api(Bottle):
     def __init__(self):
         super(Api, self).__init__()
+        self.es = Elasticsearch()
         self.route('/status', callback=self.status)
         self.route("/index", callback=self.index)
         self.route("/search/<query>", callback=self.search, method='POST')
@@ -24,9 +25,12 @@ class Api(Bottle):
 
     def search(self, query):
         print("Searching for: {}".format(query))
+        docs = self.es.search(index="text_data", body={"query": {"match_all": {}}})
+        hits = docs['hits']
+        print("Tot documents found: {}".format(len(hits)))
         d = dict()
         d['query'] = query
-        d['data'] = ["ciao", "mondo"]
+        d['data'] = hits
         return d;
 
     # def test_search(self):
