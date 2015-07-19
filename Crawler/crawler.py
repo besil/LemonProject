@@ -125,7 +125,7 @@ if __name__ == '__main__':
                         choices=["file", "elasticsearch"], default="file")
 
     args = parser.parse_args()
-    print(args)
+
     crawler_type = FileCrawler if args.save == 'file' else ElasticCrawler
     crawler = crawler_type(verbose=args.verbose)
 
