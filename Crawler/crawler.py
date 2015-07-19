@@ -87,6 +87,11 @@ class Crawler(HTMLParser, object):
         raise Exception("Must never be called")
 
 class FileCrawler(Crawler):
+    def __init__(self, verbose=False):
+        Crawler.__init__(self, verbose=verbose)
+        self.log.debug("Chosen FileCrawler implementation")
+        self.log.info("Storing data in {} directories".format("data/{raw, text}/"))
+
     def persist(self, doc_id, raw_data="", text_data=""):
         if raw_data != "":
             with open("data/raw/document_{}.html".format(doc_id), "w") as out:
@@ -98,12 +103,17 @@ class FileCrawler(Crawler):
                 out.flush()
 
 class ElasticCrawler(Crawler):
-    def __init__(self):
+    def __init__(self, verbose=False):
+        Crawler.__init__(self, verbose=verbose)
+        self.log.debug("Chosen ElasticCrawler implementation")
+        self.log.info("Available Web UI at http://localhost:9200/_plugin/head/")
         self.es = Elasticsearch()
 
-    def persist(self, doc_id, data):
-        doc = {"id": doc_id, "data": data}
-        self.es.index(index="crawling", doc_type="text", id=doc_id, body=doc)
+    def persist(self, doc_id, raw_data="", text_data=""):
+        doc = {"id": doc_id, "data": raw_data}
+        self.es.index(index="raw_data", doc_type="text", id=doc_id, body=doc)
+        doc = {"id": doc_id, "data": text_data}
+        self.es.index(index="text_data", doc_type="text", id=doc_id, body=doc)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -113,6 +123,8 @@ if __name__ == '__main__':
                         choices=["file", "elasticsearch"], default="file")
 
     args = parser.parse_args()
-    crawler = FileCrawler(verbose=args.verbose)
+    print(args)
+    crawler_type = FileCrawler if args.save == 'file' else ElasticCrawler
+    crawler = crawler_type(verbose=args.verbose)
 
     crawler.start(crawls=args.crawls)

@@ -1,3 +1,5 @@
+import sys
+
 __author__ = 'besil'
 
 import utils
@@ -31,7 +33,6 @@ class UrlServer(Bottle):
                 f.write(str(start_doc))
                 f.flush()
 
-        count = -1
         with open(filename, 'r') as fin:
             line = fin.readline()
             if line == "":
@@ -40,8 +41,13 @@ class UrlServer(Bottle):
                 return self._get_starting_doc()
             count = int(line)
             if count != start_doc:
-                print(
-                    "Count is different from start_doc={}. Regenerating the file with {}".format(start_doc, start_doc))
+                res = "Document count is at {}".format(count)
+                res += " which is different from start_doc={}.\n".format(start_doc)
+                res += "Regenerating file {} with count {}.\n".format(self.url_count_file, start_doc)
+                res += "Type q to exit or enter to continue... "
+                uin = input(res)
+                if uin == 'q':
+                    sys.exit(0)
                 os.remove(filename)
                 return self._get_starting_doc(start_doc)
         return count
