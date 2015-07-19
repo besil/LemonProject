@@ -15,8 +15,7 @@
 </div>
 
 <div class="container">
-    <!--<h3 ng-model="query">Results for: {{query}}</h3>-->
-    <h3 ng-model="query_title">Results for: {{query_title}}</h3>
+    <h3 ng-show="show_results == 'true'" ng-model="query_title">Results for: {{query_title}}</h3>
 
     <ul>
         <li ng-repeat="x in results">
