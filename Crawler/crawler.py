@@ -25,7 +25,7 @@ class Crawler(HTMLParser, object):
         f = urllib.request.urlopen(url_server)
         return f.read().decode("utf-8")
 
-    def start(self, crawls=1, min_size=4610, verbose=False):
+    def start(self, crawls=1, min_size=4610):
         for _ in range(crawls):
             url_data = json.loads(self.get_new_url())
             url = url_data['url']
@@ -115,4 +115,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     crawler = FileCrawler(verbose=args.verbose)
 
-    crawler.start(crawls=args.crawls, verbose=args.verbose)
+    crawler.start(crawls=args.crawls)
