@@ -7,12 +7,15 @@ angular.module('myApp', []).controller('searcher', function($scope, $http) {
     $scope.search = function() {
         q = $scope.query;
         console.log("Query is: "+$scope.query);
+        var url = "http://localhost:8500/search";
+        var payload = {query: q};
+//        console.log("Paylod is: "+payload)
 
-        $http({method:"POST", url:"http://localhost:8500/search/"+q})
+        $http.post(url, payload) // ({method:"POST", url:"http://localhost:8500/search/"+q})
             .success(function(response) {
                 console.log("Success!");
-                console.log("response.query: "+response.query);
-                console.log("response.data: "+response.data);
+//                console.log("response.query: "+response.query);
+//                console.log("response.data: "+response.data);
 
                 $scope.query_title = response.query;
                 $scope.results = response.data;
