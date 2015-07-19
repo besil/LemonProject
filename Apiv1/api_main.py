@@ -11,6 +11,7 @@ class Api(Bottle):
         super(Api, self).__init__()
         self.route('/status', callback=self.status)
         self.route("/index", callback=self.index)
+        self.route("/test", callback=self.test)
         self.route("/js/<filename>", callback=self.js)
 
     def status(self):
@@ -18,6 +19,9 @@ class Api(Bottle):
 
     def index(self):
         return static_file("index.html", root="templates/")
+
+    def test(self):
+        return static_file("test.html", root="templates/")
 
     def js(self, filename):
         return static_file(filename, root="js/")
