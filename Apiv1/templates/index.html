@@ -8,10 +8,21 @@
 
     <h3>Look for some terms</h3>
 
-    <input type="text" placeholder="Words"/>
+    <input type="text" placeholder="Words" ng-model="query"/>
 
-    <button ng-click="greet()">Greet</button>
+    <button ng-click="search()">Search</button>
 
+</div>
+
+<div class="container">
+    <!--<h3 ng-model="query">Results for: {{query}}</h3>-->
+    <h3 ng-model="query_title">Results for: {{query_title}}</h3>
+
+    <ul>
+        <li ng-repeat="x in results">
+            {{ x }}
+        </li>
+    </ul>
 </div>
 
 <script src="js/searcher.js"></script>

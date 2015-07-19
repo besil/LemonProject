@@ -11,6 +11,8 @@ class Api(Bottle):
         super(Api, self).__init__()
         self.route('/status', callback=self.status)
         self.route("/index", callback=self.index)
+        self.route("/search/<query>", callback=self.search, method='POST')
+        # self.route("/test/search", callback=self.test_search)
         self.route("/test", callback=self.test)
         self.route("/js/<filename>", callback=self.js)
 
@@ -19,6 +21,19 @@ class Api(Bottle):
 
     def index(self):
         return static_file("index.html", root="templates/")
+
+    def search(self, query):
+        print("Searching for: {}".format(query))
+        d = dict()
+        d['query'] = query
+        d['data'] = ["ciao", "mondo"]
+        return d;
+
+    # def test_search(self):
+    #     print("Here in test/search")
+    #     d = dict()
+    #     d['data'] = ["ciao", "mondo"]
+    #     return d
 
     def test(self):
         return static_file("test.html", root="templates/")
