@@ -14,7 +14,6 @@ class Api(Bottle):
         self.route('/status', callback=self.status)
         self.route("/index", callback=self.index)
         self.route("/search", callback=self.search, method='POST')
-        # self.route("/test/search", callback=self.test_search)
         self.route("/test", callback=self.test)
         self.route("/js/<filename>", callback=self.js)
 
@@ -26,11 +25,6 @@ class Api(Bottle):
         return static_file("index.html", root="templates/")
 
     def search(self):
-        # pprint(request)
-        # pprint("request.forms: {}".format(request.forms))
-        # pprint("request.forms.keys(): {}".format(request.forms.keys()))
-        # pprint("request.json: {}".format( request.json) )
-
         params = request.json
         query = params['query']
 
