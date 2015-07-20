@@ -19,7 +19,8 @@
 
     <ul>
         <li ng-repeat="x in results">
-            {{ x._id }}: {{ x._score }}
+            <a href="{{ remote_url + x._id }}" target="_blank">Original document</a> - Score: {{ x._score }}
+            <!--{{ remote_url + x._id }}: {{ x._score }}-->
         </li>
     </ul>
 </div>
