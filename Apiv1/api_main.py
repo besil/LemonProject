@@ -31,20 +31,35 @@ class Api(Bottle):
         limit = params['limit']
 
         print("Searching for: {}".format(query))
-        docs = self.es.search(index="text_data", fields=["_id", "score"], size=limit, body={
+        print(query.split(" "))
+        equery = {
             "query": {
-                "match_phrase": {
-                    "data": query,
+                "match": {
+                    "data": {
+                        "query": query,
+                        "operator": "and"
+                    }
                 }
-                # "bool": {
-                #     "must": {
-                #         "prefix": {
-                #             "data": query
-                #         }
-                #     }
-                # }
+                }
             }
-        })
+
+        print("Equery: ")
+        pprint(equery)
+        docs = self.es.search(index="text_data", fields=["_id", "score"], size=limit, body=equery)
+        # {
+        #     "query": {
+        #         "match_phrase_prefix": {
+        #             "data": query,
+        #         }
+        #         # "bool": {
+        #         #     "must": {
+        #         #         "prefix": {
+        #         #             "data": query
+        #         #         }
+        #         #     }
+        #         # }
+        #     }
+        # })
 
         hits = docs['hits']
         print("hits.keys(): {}".format(hits.keys()))
@@ -52,7 +67,7 @@ class Api(Bottle):
         data = hits['hits']
         total = hits['total']
 
-        pprint(data)
+        # pprint(data)
         pprint("Total documents found: {}".format(total))
 
         d = dict()
