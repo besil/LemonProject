@@ -64,12 +64,6 @@ class Api(Bottle):
         d['total'] = total
         return d;
 
-    # def test_search(self):
-    #     print("Here in test/search")
-    #     d = dict()
-    #     d['data'] = ["ciao", "mondo"]
-    #     return d
-
     def test(self):
         return static_file("test.html", root="templates/")
 
@@ -79,5 +73,4 @@ class Api(Bottle):
 
 if __name__ == '__main__':
     app = Api()
-    # app = UrlServer()
     app.run(host=utils.url_server_host, port=utils.url_server_port, debug=True)
