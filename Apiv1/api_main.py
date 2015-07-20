@@ -33,8 +33,12 @@ class Api(Bottle):
         print("Searching for: {}".format(query))
         docs = self.es.search(index="text_data", fields=["_id", "score"], size=limit, body={
             "query": {
-                "match": {
-                    "data": query
+                "bool": {
+                    "must": {
+                        "prefix": {
+                            "data": query
+                        }
+                    }
                 }
             }
         })
@@ -71,6 +75,7 @@ class Api(Bottle):
 
     def js(self, filename):
         return static_file(filename, root="js/")
+
 
 if __name__ == '__main__':
     app = Api()
