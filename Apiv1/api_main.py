@@ -5,6 +5,7 @@ import utils
 utils.check()
 from bottle import Bottle, static_file, request
 from elasticsearch import Elasticsearch
+from pprint import pprint
 
 
 class Api(Bottle):
@@ -27,15 +28,17 @@ class Api(Bottle):
     def search(self):
         params = request.json
         query = params['query']
+        limit = params['limit']
 
         print("Searching for: {}".format(query))
-        docs = self.es.search(index="text_data", fields=["_id", "score"], size=200, body={
+        docs = self.es.search(index="text_data", fields=["_id", "score"], size=limit, body={
             "query": {
                 "match": {
                     "data": query
                 }
             }
         })
+
         hits = docs['hits']
         # print("Tot documents retrived: {}".format(len(hits)))
         # pprint(docs.keys())
@@ -45,10 +48,16 @@ class Api(Bottle):
 
         # for i in range(10):
         #     print( hits['hits'][i] )
+        data = hits['hits']
+        total = hits['total']
+        pprint(data)
+        pprint("Total documents found: {}".format(total))
 
         d = dict()
         d['query'] = query
-        d['data'] = hits['hits']
+        d['data'] = data
+        d['limit'] = limit
+        d['total'] = total
         return d;
 
     # def test_search(self):
