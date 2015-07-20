@@ -33,27 +33,25 @@ class Api(Bottle):
         print("Searching for: {}".format(query))
         docs = self.es.search(index="text_data", fields=["_id", "score"], size=limit, body={
             "query": {
-                "bool": {
-                    "must": {
-                        "prefix": {
-                            "data": query
-                        }
-                    }
+                "match_phrase": {
+                    "data": query,
                 }
+                # "bool": {
+                #     "must": {
+                #         "prefix": {
+                #             "data": query
+                #         }
+                #     }
+                # }
             }
         })
 
         hits = docs['hits']
-        # print("Tot documents retrived: {}".format(len(hits)))
-        # pprint(docs.keys())
-        # pprint(hits)
         print("hits.keys(): {}".format(hits.keys()))
-        # print( "hits['hits']: {}".format(hits['hits']))
 
-        # for i in range(10):
-        #     print( hits['hits'][i] )
         data = hits['hits']
         total = hits['total']
+
         pprint(data)
         pprint("Total documents found: {}".format(total))
 
